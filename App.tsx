@@ -1,6 +1,12 @@
-import React from 'react';
-import {SplashScreen} from './src/screens/SplashScreen';
+import 'react-native-gesture-handler';
+
+import {NavigationContainer} from '@react-navigation/native';
+import {StackNavigator} from './src/navigator/SplashScreen';
 
 export const App = () => {
-  return <SplashScreen />;
+  return (
+    <NavigationContainer>
+      <StackNavigator />
+    </NavigationContainer>
+  );
 };
