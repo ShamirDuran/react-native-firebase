@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {colors} from '../theme/colors';
+import {colors} from '../themes/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface Props {

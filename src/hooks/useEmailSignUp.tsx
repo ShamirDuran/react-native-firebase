@@ -18,17 +18,15 @@ export const useSignUp = () => {
       );
       const user = userCredentials.user;
       console.log('User account created & signed in!', user);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        if (error.code === 'auth/email-already-in-use') {
-          setError('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          setError('That email address is invalid!');
-        }
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
+        setError('That email address is already in use!');
       }
-      console.error(error);
+
+      if (error.code === 'auth/invalid-email') {
+        setError('That email address is invalid!');
+      }
+      // console.log(error.code);
     }
 
     setIsLoading(false);

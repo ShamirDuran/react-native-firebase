@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import {colors} from '../theme/colors';
+import {colors} from '../themes/colors';
 
 interface Props {
   onPress: () => void;

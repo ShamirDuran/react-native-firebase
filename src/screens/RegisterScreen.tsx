@@ -1,12 +1,13 @@
 import {StyleSheet, Text, TextInput, View, Keyboard} from 'react-native';
 import {IconButton} from '../components/IconButton';
-import {customStyles, customValues} from '../theme/customStyles';
-import {colors} from '../theme/colors';
+import {customStyles, customValues} from '../themes/customStyles';
+import {colors} from '../themes/colors';
 import {CustomButton} from '../components/CustomButton';
 import {SpaceBox} from '../components/SpaceBox';
 import {useSignUp} from '../hooks/useEmailSignUp';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useState} from 'react';
+import {showToast} from '../helpers/Toast';
 
 const initialFormState = {
   email: '',
@@ -21,7 +22,8 @@ export const RegisterScreen = () => {
   const onSubmitSignUpWithEmail = async () => {
     Keyboard.dismiss();
     signUp(formValues.email, formValues.password);
-    error && console.log(error, 'error');
+    !error && setFormValues(initialFormState);
+    error && showToast('error', 'SignUp Failed', error);
   };
 
   return (
@@ -37,8 +39,8 @@ export const RegisterScreen = () => {
         <Text style={styles.title}>Firebase</Text>
       </View>
 
+      {/* Email and password signup */}
       <View style={[styles.bodyContainer, {flex: 3}]}>
-        {/* Email and password signup */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -66,8 +68,8 @@ export const RegisterScreen = () => {
           />
         </View>
 
+        {/* Others signup methods */}
         <View>
-          {/* Others signup methods */}
           <View style={{alignSelf: 'center', marginBottom: 10}}>
             <Text>Or sign up with</Text>
           </View>
