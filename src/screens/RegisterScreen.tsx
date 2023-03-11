@@ -4,10 +4,10 @@ import {customStyles, customValues} from '../themes/customStyles';
 import {colors} from '../themes/colors';
 import {CustomButton} from '../components/CustomButton';
 import {SpaceBox} from '../components/SpaceBox';
-import {useSignUp} from '../hooks/useEmailSignUp';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useState} from 'react';
 import {showToast} from '../helpers/Toast';
+import {useAuth} from '../hooks/useAuth';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const initialFormState = {
   email: '',
@@ -16,12 +16,20 @@ const initialFormState = {
 
 export const RegisterScreen = () => {
   const [formValues, setFormValues] = useState(initialFormState);
-  const {signUp, error, isLoading} = useSignUp();
+  const {signUpWithEmail, signInWithGoogle, isLoading, error} = useAuth();
 
   // TODO: Handle error
   const onSubmitSignUpWithEmail = async () => {
+    if (!formValues.email || !formValues.password) {
+      return showToast(
+        'error',
+        'SignUp Failed',
+        'Email and password are required',
+      );
+    }
+
     Keyboard.dismiss();
-    signUp(formValues.email, formValues.password);
+    await signUpWithEmail(formValues.email, formValues.password);
     !error && setFormValues(initialFormState);
     error && showToast('error', 'SignUp Failed', error);
   };
@@ -75,12 +83,7 @@ export const RegisterScreen = () => {
           </View>
 
           <View style={styles.methodsContainer}>
-            <IconButton
-              iconName="google"
-              onPress={() => {
-                console.log('Google');
-              }}
-            />
+            <IconButton iconName="google" onPress={signInWithGoogle} />
             <SpaceBox space={10} />
             <IconButton
               iconName="facebook"
