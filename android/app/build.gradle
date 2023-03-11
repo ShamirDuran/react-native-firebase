@@ -94,9 +94,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.firebase"
+    namespace "com.sdev.firebase_test"
     defaultConfig {
-        applicationId "com.firebase"
+        applicationId "com.sdev.firebase_test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

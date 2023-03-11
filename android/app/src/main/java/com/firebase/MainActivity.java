@@ -1,4 +1,4 @@
-package com.firebase;
+package com.sdev.firebase_test;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

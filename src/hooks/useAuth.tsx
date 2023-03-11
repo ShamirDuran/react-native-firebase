@@ -52,6 +52,7 @@ export const useAuth = () => {
       // Sign-in the user with the credential
       const data = await auth().signInWithCredential(googleCredential);
       setUser(data.user);
+      console.log('User account created & signed in!', data.user.email);
     } catch (error: any) {
       switch (error.code) {
         case statusCodes.SIGN_IN_CANCELLED:
@@ -91,7 +92,7 @@ export const useAuth = () => {
       await GoogleSignin.configure({
         // Get webclientId from google-services.json at oauth_client section and client_type: 3
         webClientId:
-          '952474049528-oab4tba82lnsfnqfmfl8o07ot2454t58.apps.googleusercontent.com',
+          '952474049528-n0vj8dvsguop5kqq8pvu2fprm2btdktr.apps.googleusercontent.com',
         offlineAccess: false,
       });
     };

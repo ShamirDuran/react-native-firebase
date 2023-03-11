@@ -7,22 +7,22 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:952474049528:android:6da39c863555f0aeb2940d",
+        "mobilesdk_app_id": "1:952474049528:android:17e22b645ec1a4e2b2940d",
         "android_client_info": {
-          "package_name": "com.firebase"
+          "package_name": "com.sdev.firebase_test"
         }
       },
       "oauth_client": [
         {
-          "client_id": "952474049528-b3fl5d15hu9uj8bd3m7jb3gl6u8mtmst.apps.googleusercontent.com",
+          "client_id": "952474049528-hec39oktbvq4shbaco7km7obvf3f4bjl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.firebase",
-            "certificate_hash": "82b26d962f4e36a2ac23dcc004be30b21cd101b9"
+            "package_name": "com.sdev.firebase_test",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "952474049528-oab4tba82lnsfnqfmfl8o07ot2454t58.apps.googleusercontent.com",
+          "client_id": "952474049528-n0vj8dvsguop5kqq8pvu2fprm2btdktr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "952474049528-oab4tba82lnsfnqfmfl8o07ot2454t58.apps.googleusercontent.com",
+              "client_id": "952474049528-n0vj8dvsguop5kqq8pvu2fprm2btdktr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
