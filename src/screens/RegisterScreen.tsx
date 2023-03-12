@@ -4,10 +4,12 @@ import {customStyles, customValues} from '../themes/customStyles';
 import {colors} from '../themes/colors';
 import {CustomButton} from '../components/CustomButton';
 import {SpaceBox} from '../components/SpaceBox';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {showToast} from '../helpers/Toast';
 import {useAuth} from '../hooks/useAuth';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {LoadingContext} from '../provider/LoadingProvider';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const initialFormState = {
   email: '',
@@ -17,6 +19,7 @@ const initialFormState = {
 export const RegisterScreen = () => {
   const [formValues, setFormValues] = useState(initialFormState);
   const {signUpWithEmail, signInWithGoogle, isLoading, error} = useAuth();
+  const {setLoading} = useContext(LoadingContext);
 
   // TODO: Handle error
   const onSubmitSignUpWithEmail = async () => {
@@ -29,7 +32,11 @@ export const RegisterScreen = () => {
     }
 
     Keyboard.dismiss();
+
+    setLoading(true);
     await signUpWithEmail(formValues.email, formValues.password);
+    setLoading(false);
+
     !error && setFormValues(initialFormState);
     error && showToast('error', 'SignUp Failed', error);
   };
@@ -72,7 +79,6 @@ export const RegisterScreen = () => {
             btnStyle={styles.btnSubmit}
             textStyle={styles.btnText}
             onPress={onSubmitSignUpWithEmail}
-            isLoading={isLoading}
           />
         </View>
 
@@ -83,19 +89,20 @@ export const RegisterScreen = () => {
           </View>
 
           <View style={styles.methodsContainer}>
-            <IconButton iconName="google" onPress={signInWithGoogle} />
+            <IconButton
+              iconName="google"
+              onPress={async () => {
+                setLoading(true);
+                await GoogleSignin.signOut(); // Just in case, manually signout last user
+                await signInWithGoogle();
+                setLoading(false);
+              }}
+            />
             <SpaceBox space={10} />
             <IconButton
               iconName="facebook"
               onPress={() => {
                 console.log('Facebook');
-              }}
-            />
-            <SpaceBox space={10} />
-            <IconButton
-              iconName="apple"
-              onPress={() => {
-                console.log('Apple ID');
               }}
             />
           </View>
