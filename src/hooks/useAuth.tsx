@@ -4,6 +4,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {AccessToken, LoginManager} from 'react-native-fbsdk-next';
 
 export const useAuth = () => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
@@ -19,7 +20,8 @@ export const useAuth = () => {
         password,
       );
       const user = userCredentials.user;
-      console.log('User account created & signed in!', user);
+      setUser(user);
+      console.log('User account created & signed in with Email!', user);
     } catch (error: any) {
       switch (error.code) {
         case 'auth/email-already-in-use':
@@ -47,12 +49,15 @@ export const useAuth = () => {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       // Get the users ID token
       const {idToken} = await GoogleSignin.signIn();
-      // Create a Google credential with the token
+      // Create a Firebase with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       // Sign-in the user with the credential
       const data = await auth().signInWithCredential(googleCredential);
       setUser(data.user);
-      console.log('User account created & signed in!', data.user.email);
+      console.log(
+        'User account created & signed in with Google!',
+        data.user.email,
+      );
     } catch (error: any) {
       switch (error.code) {
         case statusCodes.SIGN_IN_CANCELLED:
@@ -71,8 +76,8 @@ export const useAuth = () => {
           break;
 
         default:
-          console.log('Something went wrong', error);
-          setError('Something went wrong');
+          console.log('Something went wrong with Google SignIn', error);
+          setError('Something went wrong with Google SignIn');
           break;
       }
     }
@@ -80,10 +85,64 @@ export const useAuth = () => {
     setIsLoading(false);
   };
 
+  const signInWithFacebook = async () => {
+    setIsLoading(true);
+
+    try {
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+      if (result.isCancelled) throw 'User cancelled the login process';
+
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) throw 'Something went wrong obtaining access token';
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      // Sign-in the user with the credential
+      const userData = await auth().signInWithCredential(facebookCredential);
+      setUser(userData.user);
+      console.log(
+        'User account created & signed in with Facebook!',
+        userData.user.email,
+      );
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/account-exists-with-different-credential':
+          console.log(
+            'An account already exists with the same email address but different sign-in credential',
+          );
+          setError(
+            'An account already exists with the same email address but different sign-in credential',
+          );
+          break;
+
+        default:
+          console.log(error);
+          setError('Something went wrong with Facebook SignIn');
+          break;
+      }
+    }
+
+    setIsLoading(false);
+  };
+
+  // Firebase sign out
   const signOut = async () => {
-    // Firebase sign out
-    await auth().signOut();
-    setUser(null);
+    try {
+      // Just in case, manually signout google
+      await GoogleSignin.signOut();
+      // Just in case, manually signout facebook
+      await LoginManager.logOut();
+      // Signout firebase
+      await auth().signOut();
+    } catch (error) {}
   };
 
   // Configure Google Sign-in and suscribe to firebase auth state changes
@@ -99,6 +158,7 @@ export const useAuth = () => {
     configureGoogleSignIn();
 
     const subscriber = auth().onAuthStateChanged(user => {
+      console.log(user?.uid, 'User suscribed');
       setUser(user);
     });
 
@@ -106,5 +166,13 @@ export const useAuth = () => {
     return subscriber;
   }, []);
 
-  return {signUpWithEmail, signInWithGoogle, signOut, user, isLoading, error};
+  return {
+    signUpWithEmail,
+    signInWithGoogle,
+    signInWithFacebook,
+    signOut,
+    user,
+    isLoading,
+    error,
+  };
 };

@@ -1,15 +1,15 @@
 import {StyleSheet, Text, TextInput, View, Keyboard} from 'react-native';
 import {IconButton} from '../components/IconButton';
-import {customStyles, customValues} from '../themes/customStyles';
+import {customStyles, customValues} from '../themes/values';
 import {colors} from '../themes/colors';
 import {CustomButton} from '../components/CustomButton';
 import {SpaceBox} from '../components/SpaceBox';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {showToast} from '../helpers/Toast';
 import {useAuth} from '../hooks/useAuth';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {LoadingContext} from '../provider/LoadingProvider';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const initialFormState = {
   email: '',
@@ -18,10 +18,22 @@ const initialFormState = {
 
 export const RegisterScreen = () => {
   const [formValues, setFormValues] = useState(initialFormState);
-  const {signUpWithEmail, signInWithGoogle, isLoading, error} = useAuth();
+  const {signUpWithEmail, signInWithGoogle, signInWithFacebook, user, error} =
+    useAuth();
   const {setLoading} = useContext(LoadingContext);
+  const navigator = useNavigation();
 
-  // TODO: Handle error
+  // Handle Errors
+  useEffect(() => {
+    if (error) showToast('error', 'SignUp Failed', error);
+    else setFormValues(initialFormState);
+  }, [error]);
+
+  // Handle Success SignIn
+  useEffect(() => {
+    if (user) navigator.navigate('HomeScreen' as never);
+  }, [user]);
+
   const onSubmitSignUpWithEmail = async () => {
     if (!formValues.email || !formValues.password) {
       return showToast(
@@ -36,9 +48,6 @@ export const RegisterScreen = () => {
     setLoading(true);
     await signUpWithEmail(formValues.email, formValues.password);
     setLoading(false);
-
-    !error && setFormValues(initialFormState);
-    error && showToast('error', 'SignUp Failed', error);
   };
 
   return (
@@ -93,7 +102,6 @@ export const RegisterScreen = () => {
               iconName="google"
               onPress={async () => {
                 setLoading(true);
-                await GoogleSignin.signOut(); // Just in case, manually signout last user
                 await signInWithGoogle();
                 setLoading(false);
               }}
@@ -101,8 +109,10 @@ export const RegisterScreen = () => {
             <SpaceBox space={10} />
             <IconButton
               iconName="facebook"
-              onPress={() => {
-                console.log('Facebook');
+              onPress={async () => {
+                setLoading(true);
+                await signInWithFacebook();
+                setLoading(false);
               }}
             />
           </View>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">firebase</string>
+    <string name="facebook_app_id">889323318994268</string>
+    <string name="facebook_client_token">663804c2a86a3fc9eedb92907d32a71a</string>
 </resources>

@@ -6,7 +6,7 @@ import {RegisterScreen} from '../screens/RegisterScreen';
 export type RootStackParamsList = {
   SplashScreen: undefined;
   HomeScreen: undefined;
-  LoginScreen: undefined;
+  RegisterScreen: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamsList>();
@@ -14,7 +14,7 @@ const Stack = createStackNavigator<RootStackParamsList>();
 export const StackNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="LoginScreen"
+      initialRouteName="SplashScreen"
       screenOptions={{
         headerShown: false,
         headerStyle: {
@@ -24,7 +24,7 @@ export const StackNavigator = () => {
       }}>
       <Stack.Group screenOptions={{cardStyle: {backgroundColor: 'white'}}}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="LoginScreen" component={RegisterScreen} />
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
       </Stack.Group>
     </Stack.Navigator>
