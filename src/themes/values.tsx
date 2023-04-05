@@ -9,7 +9,10 @@ export const customStyles = StyleSheet.create({
 });
 
 export const customValues = {
+  margin: 15,
   borderRadius: 5,
   userPlaceholder:
     'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png',
 };
+
+export const applicationName = 'firebase';

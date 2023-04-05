@@ -8,8 +8,8 @@ import {useContext, useEffect, useState} from 'react';
 import {showToast} from '../helpers/Toast';
 import {useAuth} from '../hooks/useAuth';
 import {LoadingContext} from '../provider/LoadingProvider';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const initialFormState = {
   email: '',

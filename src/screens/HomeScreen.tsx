@@ -4,6 +4,8 @@ import {Button, Image, StyleSheet, Text, View} from 'react-native';
 import {SpaceBox} from '../components/SpaceBox';
 import {useAuth} from '../hooks/useAuth';
 import {customValues} from '../themes/values';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {colors} from '../themes/colors';
 
 export const HomeScreen = () => {
   const {user, signOut} = useAuth();
@@ -20,6 +22,10 @@ export const HomeScreen = () => {
       index: 0,
       routes: [{name: 'RegisterScreen' as never}],
     });
+  };
+
+  const handleNotifications = async () => {
+    console.log('push notifications');
   };
 
   useEffect(() => {
@@ -43,29 +49,49 @@ export const HomeScreen = () => {
   }, [user]);
 
   return (
-    <View style={styles.container}>
-      <Text>You're Logged In</Text>
-      <SpaceBox space={15} axis={'vertical'} />
-
-      <View>
-        <Image style={styles.userPhoto} source={{uri: userData.photo}} />
+    <View style={styles.mainWrapper}>
+      <View style={styles.appbarWrapper}>
+        <Icon
+          name="notifications-circle"
+          color={colors.firebase}
+          size={35}
+          onPress={handleNotifications}
+        />
       </View>
-      <SpaceBox space={15} axis={'vertical'} />
 
-      <Text>{userData.name}</Text>
-      <Text>{userData.email}</Text>
-      <SpaceBox space={30} axis={'vertical'} />
+      <View style={styles.contentWrapper}>
+        <Text>You're Logged In</Text>
+        <SpaceBox space={15} axis={'vertical'} />
 
-      <Button title="Sign Out" onPress={handleSignOut} />
+        <View>
+          <Image style={styles.userPhoto} source={{uri: userData.photo}} />
+        </View>
+        <SpaceBox space={15} axis={'vertical'} />
+
+        <Text>{userData.name}</Text>
+        <Text>{userData.email}</Text>
+        <SpaceBox space={30} axis={'vertical'} />
+
+        <Button title="Sign Out" onPress={handleSignOut} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  contentWrapper: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  appbarWrapper: {
+    alignSelf: 'flex-end',
+    marginEnd: customValues.margin,
+    marginTop: customValues.margin,
   },
   userPhoto: {
     width: 100,
